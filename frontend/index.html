@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動物配對遊戲</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // 修改環境變量
+        window.env = {
+            IMAGES_PATH: '../images/',
+            SOUNDS_PATH: '../sounds/'
+        };
+    </script>
+</head>
+<body>
+    <div id="game-container">
+        <div id="main-menu" class="screen">
+            <h1>動物配對遊戲</h1>
+            <button id="start-game-2x4">2x2 遊戲</button>
+            <button id="start-game-4x4">4x4 遊戲</button>
+        </div>
+        <div id="game-board" class="screen hidden">
+            <div id="cards-container"></div>
+            <button id="return-to-menu">返回主選單</button>
+        </div>
+        <div id="story-creation" class="screen hidden">
+            <div id="selected-animal"></div>
+            <div id="story-board"></div>
+            <!-- 修改這裡：初始狀態設為隱藏 -->
+            <button id="generate-story" class="hidden">生成故事</button>
+            <!-- 移除重新開始按鈕，因為我們不再需要它 -->
+            <!-- <button id="reset-story">重新開始</button> -->
+            <div id="story-display"></div>
+            <div id="loading-animation" class="hidden">正在生成故事...</div>
+            <button id="return-to-menu">返回主選單</button>
+        </div>
+    </div>
+    <audio id="background-music" loop>
+        <source src="../sounds/background.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="flip-sound">
+        <source src="../sounds/flip.wav" type="audio/wav">
+    </audio>
+    <audio id="match-sound">
+        <source src="../sounds/match.wav" type="audio/wav">
+    </audio>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/story.js"></script>
+</body>
+</html>
