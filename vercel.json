@@ -5,7 +5,8 @@
     { "src": "static/js/*", "use": "@vercel/static" },
     { "src": "static/images/*", "use": "@vercel/static" },
     { "src": "static/sounds/*", "use": "@vercel/static" },
-    { "src": "static/css/*", "use": "@vercel/static" }
+    { "src": "static/css/*", "use": "@vercel/static" },
+    { "src": "static/index.html", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "backend/app.py" },
@@ -13,7 +14,6 @@
     { "src": "/static/images/(.*)", "dest": "/static/images/$1" },
     { "src": "/static/sounds/(.*)", "dest": "/static/sounds/$1" },
     { "src": "/static/css/(.*)", "dest": "/static/css/$1" },
-    { "src": "/(.*)", "dest": "/static/index.html" }
+    { "src": "/", "dest": "/static/index.html" }
   ]
 }
-
