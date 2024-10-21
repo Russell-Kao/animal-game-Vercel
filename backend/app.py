@@ -10,7 +10,7 @@ from openai import OpenAI
 
 load_dotenv()  # 加載 .env 文件中的環境變量
 
-app = Flask(__name__)
+app = Flask(__name__, instance_path='/tmp')
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)  # 啟用 CORS
 
 # 從環境變量獲取 OpenAI API 密鑰
@@ -18,7 +18,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 ATEN_API_TOKEN = os.getenv("ATEN_API_TOKEN")
 
 # 使用 SQLite 作為輕量級資料庫
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forest_animal_game.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/forest_animal_game.db'
 db.init_app(app)
 
 # 在應用上下文中創建資料表
