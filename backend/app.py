@@ -5,7 +5,7 @@ import requests
 import time
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from models import db, Animal
+from .models import db, Animal
 from openai import OpenAI
 
 load_dotenv()  # 加載 .env 文件中的環境變量
