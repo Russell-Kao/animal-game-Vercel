@@ -10,7 +10,7 @@ from openai import OpenAI
 
 load_dotenv()  # 加載 .env 文件中的環境變量
 
-app = Flask(__name__, instance_path='/tmp')
+app = Flask(__name__, instance_path='/path/to/writeable/directory')
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)  # 啟用 CORS
 
 # 從環境變量獲取 OpenAI API 密鑰
@@ -18,7 +18,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 ATEN_API_TOKEN = os.getenv("ATEN_API_TOKEN")
 
 # 使用 SQLite 作為輕量級資料庫
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/forest_animal_game.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////path/to/writeable/directory/forest_animal_game.db'
 db.init_app(app)
 
 # 在應用上下文中創建資料表
@@ -80,20 +80,22 @@ def text_to_speech():
     data = request.json
     ssml = data['ssml']
 
-    # 發送合成請求
+    # 发出合成请求
     synthesis_response = requests.post(
-        f'{ATEN_API_URL}/syntheses/api_token',
-        headers={'Authorization': ATEN_API_TOKEN, 'Content-Type': 'application/json'},
+        f'{ATEN_API_URL}/syntheses',
+        headers={'Authorization': f'Bearer {ATEN_API_TOKEN}', 'Content-Type': 'application/json'},
         json={'ssml': ssml}
     )
 
     if synthesis_response.status_code != 200:
-        return jsonify({'error': 'Synthesis request failed'}), 500
+        print(f"Error: {synthesis_response.status_code}, {synthesis_response.text}")
+        return jsonify({'error': 'Synthesis request failed', 'details': synthesis_response.text}), 500
 
     synthesis_data = synthesis_response.json()
-    synthesis_id = synthesis_data['synthesis_id']
+    synthesis_id = synthesis_data.get('synthesis_id')
+    if not synthesis_id:
+        return jsonify({'error': 'Failed to retrieve synthesis ID'}), 500
 
-    # 立即返回合成 ID，客戶端可以使用此 ID 檢查合成狀態
     return jsonify({
         'status': 'Processing',
         'synthesis_id': synthesis_id
@@ -102,8 +104,8 @@ def text_to_speech():
 @app.route('/api/voices', methods=['GET'])
 def get_voices():
     response = requests.get(
-        f'{ATEN_API_URL}/models/api_token',
-        headers={'Authorization': ATEN_API_TOKEN}
+        f'{ATEN_API_URL}/models',
+        headers={'Authorization': f'Bearer {ATEN_API_TOKEN}'}
     )
 
     if response.status_code != 200:
@@ -118,5 +120,18 @@ def get_aten_token():
 @app.errorhandler(405)
 def method_not_allowed(e):
     return jsonify(error=str(e)), 405
+
+@app.route('/api/syntheses/<synthesis_id>/status', methods=['GET'])
+def check_synthesis_status(synthesis_id):
+    status_response = requests.get(
+        f'{ATEN_API_URL}/syntheses/{synthesis_id}',
+        headers={'Authorization': f'Bearer {ATEN_API_TOKEN}'}
+    )
+
+    if status_response.status_code != 200:
+        return jsonify({'error': 'Failed to check synthesis status', 'details': status_response.text}), 500
+
+    status_data = status_response.json()
+    return jsonify(status_data)
 
 # 刪除 app.run() 以便由 Vercel 管理伺服器

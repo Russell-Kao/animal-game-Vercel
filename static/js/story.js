@@ -1,12 +1,12 @@
 const animalFacts = {
-    bear: "熊的嗅覺非常靈敏，能聞到很遠的食物味道！",
-    dog: "狗狗有獨一無二的鼻紋喔！",
-    cat: "貓咪睡覺時間佔一天的70%！",
-    fox: "狐狸有超過40種叫聲喔！",
-    rabbit: "兔子有360度的視野喔！",
-    mouse: "老鼠非常聰明喔！",
-    monkey: "猴子也有指紋喔！",
-    elephant: "大象是唯一不能跳的哺乳動物！"
+    bear: "熊的嗅觉非常灵敏，能闻到很远的食物味道！",
+    dog: "狗狗有独一无二的鼻纹喔！",
+    cat: "猫咪睡觉时间占一天的70%！",
+    fox: "狐狸有超过40种叫声喔！",
+    rabbit: "兔子有360度的视野喔！",
+    mouse: "老鼠非常聪明喔！",
+    monkey: "猴子也有指纹喔！",
+    elephant: "大象是唯一不能跳的哺乳动物！"
 };
 
 
@@ -65,14 +65,14 @@ function createStoryBoard() {
         categoryDiv.appendChild(buttonsDiv);
         storyBoard.appendChild(categoryDiv);
         
-        // 只顯示天氣選項，隱藏其他類別
+        // 只显示天气选项，隐藏其他类别
         if (index !== 0) {
             categoryDiv.style.display = 'none';
         }
     });
 
 
-    // 隱藏生成故事按鈕
+    // 隐藏生成故事按钮
     const generateStoryButton = document.getElementById('generate-story');
     generateStoryButton.style.display = 'none';
 }
@@ -80,8 +80,8 @@ function createStoryBoard() {
 
 function getCategoryName(category) {
     const categoryNames = {
-        weather: '天氣',
-        scene: '場景',
+        weather: '天气',
+        scene: '场景',
         object: '物品'
     };
     return categoryNames[category] || category;
@@ -95,17 +95,17 @@ function selectStoryElement(category, element, button) {
     const categories = Object.keys(storyElements);
     const currentIndex = categories.indexOf(category);
 
-    console.log(`選擇的類別: ${category}, 目前索引: ${currentIndex}, 總類別數: ${categories.length}`);
+    console.log(`选择的类别: ${category}, 当前索引: ${currentIndex}, 总类别数: ${categories.length}`);
 
     if (currentIndex < categories.length - 1) {
-        // 隱藏當前類別，顯示下一個類別
+        // 隐藏当前类别，显示下一个类别
         document.querySelector(`.story-category-${category}`).style.display = 'none';
         const nextCategory = categories[currentIndex + 1];
         document.querySelector(`.story-category-${nextCategory}`).style.display = 'block';
-        console.log(`顯示下一個類別: ${nextCategory}`);
+        console.log(`显示下一个类别: ${nextCategory}`);
     } else {
-        // 如果最後一個類別（物品），顯示生成故事按鈕
-        console.log('顯示生成故事按鈕');
+        // 如果后一个类别（物品），显示生成故事按钮
+        console.log('显示生成故事按钮');
         const generateStoryButton = document.getElementById('generate-story');
         generateStoryButton.style.display = 'block';
         generateStoryButton.classList.remove('hidden');
@@ -114,7 +114,7 @@ function selectStoryElement(category, element, button) {
 
 
 function generateStory() {
-    console.log("呼叫生成故事函數");
+    console.log("呼叫生成故事函数");
     const loadingAnimation = document.getElementById('loading-animation');
     loadingAnimation.style.display = 'block';
 
@@ -135,18 +135,18 @@ function generateStory() {
     });
 
 
-    console.log("選擇的元素:", selectedElements);
+    console.log("选择的元素:", selectedElements);
 
     const emojiToText = {
         '☀️': '晴天',
         '🌧️': '雨天',
         '❄️': '雪天',
-        '🏞️': '公園',
-        '🏠': '家裡',
-        '🏫': '學校',
-        '🍎': '蘋果',
-        '📚': '書本',
-        '🎈': '氣球'
+        '🏞️': '公园',
+        '🏠': '家里',
+        '🏫': '学校',
+        '🍎': '苹果',
+        '📚': '书本',
+        '🎈': '气球'
     };
 
     const selectedElementsText = {};
@@ -154,32 +154,32 @@ function generateStory() {
         selectedElementsText[category] = emojiToText[selectedElements[category]] || selectedElements[category];
     });
 
-    const prompt = `創作一個迪士尼風格的溫馨家庭故事，適合3-8歲的小朋友。故事要求：
+    const prompt = `创作一个迪士尼风格的温馨家庭故事，适合3-8岁的小朋友。故事要求：
 
-    1. 主角：一位小${lastMatchedAnimal}公主或王子與他/她的家人。
-    2. 場景：在${selectedElementsText.scene}中慶祝特別的日子。
-    3. 天氣：${selectedElementsText.weather}
+    1. 主角：一位小${lastMatchedAnimal}公主或王子与她/他的家人。
+    2. 场景：在${selectedElementsText.scene}中庆祝特别的日子。
+    3. 天气：${selectedElementsText.weather}
     4. 重要物品：${selectedElementsText.object}
-    5. 挑戰：忘記了一樣重要的物品或事情，需要大家一起努力解決。
-    6. 情節：包括一些小冒險，主角與家人一起完成任務。
-    7. 結尾：以家庭和睦、愛與感謝為結束，讓故事有溫馨的感覺。
-    8. 風格：輕鬆、有趣、富有魔法色彩，適合小朋友的語言和詞彙。
-    9. 長度：大約80字左右，保持簡潔。
+    5. 挑战：忘记了重要物品或事情，需要大家一起努力解决。
+    6. 情节：包括一些小冒险，主角与家人一起完成任务。
+    7. 结尾：以家庭和睦、爱与感谢为结束，让故事有温馨的感觉。
+    8. 风格：轻松、有趣、富有魔法色彩，适合小朋友的语言和词汇。
+    9. 长度：大约80字左右，保持简洁。
 
-    請根據這些要求，創作一個溫馨有趣的故事，讓孩子感受到家庭溫暖和奇幻冒險的魅力。`;
+    请根据这些要求，创作一个温馨有趣的故事，让孩子感受到家庭温暖和奇幻冒险的魅力。`;
 
     console.log("提示:", prompt);
 
-    // 這裡將替換為真正的 GPT API 調用
+    // 这里将替换为真正的 GPT API 调用
     callGPTAPI(prompt).then(generatedStory => {
         console.log("生成的故事:", generatedStory);
         document.getElementById('story-display').textContent = generatedStory;
         loadingAnimation.style.display = 'none';
-        generateButton.textContent = '生成完畢';
+        generateButton.textContent = '生成完毕';
         generateButton.disabled = false;
         speakStory(generatedStory);
     }).catch(error => {
-        console.error('生成故事時發生錯誤:', error);
+        console.error('生成故事时发生错误:', error);
         loadingAnimation.style.display = 'none';
         generateButton.textContent = '重新生成故事';
         generateButton.disabled = false;
@@ -197,7 +197,7 @@ function resetStory() {
     generateButton.disabled = false;
     generateButton.style.display = 'none';
 
-    // 重置類別顯示
+    // 重置类别显示
     document.querySelector('.story-category-weather').style.display = 'block';
     document.querySelector('.story-category-scene').style.display = 'none';
     document.querySelector('.story-category-object').style.display = 'none';
@@ -206,32 +206,40 @@ function resetStory() {
 
 function playAnimalFactAudio(animal) {
     const audio = new Audio(`${window.env.SOUNDS_PATH}${animal}-fact.mp3`);
-    audio.play().catch(e => console.error("播放音訊失敗:", e));
+    audio.play().catch(e => console.error("播放音频失败:", e));
 }
 
-// 添加這個函數來獲取 ATEN token
+// 添加这个函数来获取 ATEN token
 async function getATENToken() {
-    const response = await fetch('/api/aten-token');  // 使用相對路徑
-    const data = await response.json();
-    return data.token;
+    try {
+        const response = await fetch('/api/aten-token');  // 使用相对路径从后端获取 API token
+        if (!response.ok) {
+            throw new Error(`HTTP 错误！状态: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.token;
+    } catch (error) {
+        console.error('获取 ATEN token 时发生错误:', error);
+        throw error;
+    }
 }
 
-// 修改 speakStory 函數
+// 修改 speakStory 函数
 async function speakStory(text) {
-    console.log("透過 ATEN TTS API 朗讀故事");
-    const proxyUrl = '/api/tts';  // 使用相對路徑
+    console.log("透过 ATEN TTS API 朗读故事");
+    const proxyUrl = '/api/tts';  // 使用相对路径
 
-    // 將 emoji 轉換為中文描述
+    // 将 emoji 转换为中文描述
     const emojiToText = {
         '☀️': '晴天',
         '🌧️': '雨天',
         '❄️': '雪天',
-        '🏞️': '公園',
-        '🏠': '家裡',
-        '🏫': '學校',
-        '🍎': '蘋果',
-        '📚': '書本',
-        '🎈': '氣球'
+        '🏞️': '公园',
+        '🏠': '家里',
+        '🏫': '学校',
+        '🍎': '苹果',
+        '📚': '书本',
+        '🎈': '气球'
     };
 
     let processedText = text;
@@ -246,79 +254,81 @@ async function speakStory(text) {
     try {
         const token = await getATENToken();
         
-        // 步驟1：發送合成請求
+        // 发送合成请求
         const synthesisResponse = await fetch(proxyUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': `Bearer ${token}`  // 加入 Bearer 格式
             },
             body: JSON.stringify({ ssml: ssml })
         });
 
         if (!synthesisResponse.ok) {
-            throw new Error(`HTTP 錯誤！狀態: ${synthesisResponse.status}`);
+            throw new Error(`HTTP 错误！状态: ${synthesisResponse.status}`);
         }
 
         const synthesisData = await synthesisResponse.json();
-        
-        // 步驟2：檢查合成狀態（這部分可能需要根據您的後端實現進行調整）
+        console.log("Synthesis Data:", synthesisData);  // 调试时记录响应
+
+        // 检查合成状态，并播放音频
         if (synthesisData.status === 'Success') {
-            const audio = new Audio(synthesisData.audioUrl);
-            audio.play().catch(e => console.error("播放音訊失敗:", e));
+            console.log("Audio URL:", synthesisData.synthesis_path);
+            const audio = new Audio(synthesisData.synthesis_path);
+            audio.play().catch(e => console.error("播放音频失败:", e));
         } else {
-            throw new Error('合成失敗');
+            throw new Error('合成失败');
         }
     } catch (error) {
-        console.error('語音合成過程中發生錯誤:', error);
+        console.error('语音合成过程中发生错误:', error);
     }
 }
 
-// 新增函數：查詢支援的聲優列表
+// 新增函数：查询支持的声优列表
 async function getVoiceList() {
-    const proxyUrl = '/api/voices'; // 這應該是您後端代理 API 的 URL 用於獲取聲優列表
+    const proxyUrl = '/api/voices'; // 这应该是您后端代理 API 的 URL 用于获取声优列表
 
     try {
         const response = await fetch(proxyUrl);
 
         if (!response.ok) {
-            throw new Error(`HTTP 錯誤！狀態: ${response.status}`);
+            throw new Error(`HTTP 错误！状态: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log("可用的聲優:", data);
+        console.log("可用的声优:", data);
         return data;
     } catch (error) {
-        console.error('獲取聲優列表時發生錯誤:', error);
+        console.error('获取声优列表时发生错误:', error);
         return null;
     }
 }
 
-// 在 DOMContentLoaded 事件中調用 getVoiceList
+// 在 DOMContentLoaded 事件中调用 getVoiceList
 document.addEventListener('DOMContentLoaded', () => {
     const generateStoryButton = document.getElementById('generate-story');
     const resetStoryButton = document.getElementById('reset-story');
     
     if (generateStoryButton) {
         generateStoryButton.addEventListener('click', generateStory);
-        console.log("已添加生成故事按鈕監聽器");
+        console.log("已添加生成故事按钮监听器");
     } else {
-        console.error("找不到生成故事按鈕");
+        console.error("找不到生成故事按钮");
     }
 
     if (resetStoryButton) {
         resetStoryButton.textContent = '重新生成故事';
         resetStoryButton.addEventListener('click', generateStory);
-        console.log("已添加重置故事按鈕監聽器");
+        console.log("已添加重置故事按钮监听器");
     } else {
-        console.error("找不到重置故事按鈕");
+        console.error("找不到重置故事按钮");
     }
 
-    // 獲取並顯示聲優列表
+    // 获取并显示声优列表
     getVoiceList().then(voices => {
         if (voices) {
-            console.log("可用的聲優:", voices);
-            // 這裡可以添加程式碼來在 UI 中顯示聲優列表
+            console.log("可用的声优:", voices);
+            // 这里可以添加代码来在 UI 中显示声优列表
         }
     });
 });
@@ -330,7 +340,7 @@ async function callGPTAPI(prompt) {
     console.log("使用提示呼叫 GPT API:", prompt);
     
     try {
-        const response = await fetch('/api/generate-story', {  // 使用相對路徑
+        const response = await fetch('/api/generate-story', {  // 使用相对路径
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -339,16 +349,19 @@ async function callGPTAPI(prompt) {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP 錯誤！狀態: ${response.status}`);
+            throw new Error(`HTTP 错误！状态: ${response.status}`);
         }
 
         const data = await response.json();
         return data.story;
     } catch (error) {
-        console.error('呼叫 GPT API 時發生錯誤:', error);
+        console.error('呼叫 GPT API 时发生错误:', error);
         throw error;
     }
 }
+
+
+
 
 
 
