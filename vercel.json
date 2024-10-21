@@ -14,9 +14,6 @@
     { "src": "/static/sounds/(.*)", "dest": "/static/sounds/$1" },
     { "src": "/static/css/(.*)", "dest": "/static/css/$1" },
     { "src": "/(.*)", "dest": "/static/index.html" }
-  ],
-  "env": {
-    "OPENAI_API_KEY": "@openai_api_key",
-    "ATEN_API_TOKEN": "@aten_api_token"
-  }
+  ]
 }
+
