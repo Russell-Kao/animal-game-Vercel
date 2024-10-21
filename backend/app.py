@@ -18,7 +18,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 ATEN_API_TOKEN = os.getenv("ATEN_API_TOKEN")
 
 # 使用 SQLite 作為輕量級資料庫
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////path/to/writeable/directory/forest_animal_game.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/forest_animal_game.db'
 db.init_app(app)
 
 # 在應用上下文中創建資料表
@@ -71,9 +71,14 @@ def generate_story():
         
         story = response.choices[0].message.content.strip()
         return jsonify({"story": story})
-    except Exception as e:
+    except openai.error.OpenAIError as e:
+        # 捕獲 OpenAI API 特定的錯誤
         print(f"OpenAI API 調用錯誤: {str(e)}")
-        return jsonify({"error": "生成故事時發生錯誤"}), 500
+        return jsonify({"error": "生成故事時發生錯誤", "details": str(e)}), 500
+    except Exception as e:
+        # 捕獲其他可能的錯誤
+        print(f"未知錯誤: {str(e)}")
+        return jsonify({"error": "生成故事時發生未知錯誤", "details": str(e)}), 500
 
 @app.route('/api/tts', methods=['POST'])
 def text_to_speech():
