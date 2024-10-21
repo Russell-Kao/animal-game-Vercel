@@ -1,6 +1,6 @@
 body {
     font-family: 'Comic Sans MS', 'Rounded Mplus 1c', sans-serif;
-    background-image: url('../../images/forest-background.jpg');
+    background-image: url('/static/images/forest-background.jpg'); /* 更新為絕對路徑 */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -108,7 +108,7 @@ button:active {
 }
 
 .card-front {
-    background-image: url('../images/card-back.png');
+    background-image: url('/static/images/card-back.png'); /* 更新卡片背面的圖片路徑 */
     background-size: cover;
     background-position: center;
 }

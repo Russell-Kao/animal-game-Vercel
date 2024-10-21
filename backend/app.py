@@ -17,8 +17,13 @@ CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)  #
 openai.api_key = os.getenv("OPENAI_API_KEY")
 ATEN_API_TOKEN = os.getenv("ATEN_API_TOKEN")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost/forest_animal_game'
+# 使用 SQLite 作為輕量級資料庫
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forest_animal_game.db'
 db.init_app(app)
+
+# 在應用上下文中創建資料表
+with app.app_context():
+    db.create_all()  # 創建資料表（如果尚未創建）
 
 # 設置資源路徑
 IMAGES_PATH = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'images')
@@ -75,7 +80,7 @@ def text_to_speech():
     data = request.json
     ssml = data['ssml']
 
-    # 步驟1：發送合成請求
+    # 發送合成請求
     synthesis_response = requests.post(
         f'{ATEN_API_URL}/syntheses/api_token',
         headers={'Authorization': ATEN_API_TOKEN, 'Content-Type': 'application/json'},
@@ -88,27 +93,11 @@ def text_to_speech():
     synthesis_data = synthesis_response.json()
     synthesis_id = synthesis_data['synthesis_id']
 
-    # 步驟2：檢查合成狀態
-    while True:
-        status_response = requests.get(
-            f'{ATEN_API_URL}/syntheses/{synthesis_id}/api_token',
-            headers={'Authorization': ATEN_API_TOKEN}
-        )
-
-        if status_response.status_code != 200:
-            return jsonify({'error': 'Status check failed'}), 500
-
-        status_data = status_response.json()
-        if status_data['status'] == 'Success':
-            return jsonify({
-                'status': 'Success',
-                'audioUrl': status_data['synthesis_path']
-            })
-        elif status_data['status'] == 'Error':
-            return jsonify({'error': 'Synthesis failed'}), 500
-
-        # 等待一段時間後再次檢查
-        time.sleep(1)
+    # 立即返回合成 ID，客戶端可以使用此 ID 檢查合成狀態
+    return jsonify({
+        'status': 'Processing',
+        'synthesis_id': synthesis_id
+    })
 
 @app.route('/api/voices', methods=['GET'])
 def get_voices():
@@ -130,5 +119,4 @@ def get_aten_token():
 def method_not_allowed(e):
     return jsonify(error=str(e)), 405
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# 刪除 app.run() 以便由 Vercel 管理伺服器

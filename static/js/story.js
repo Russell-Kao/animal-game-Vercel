@@ -104,7 +104,7 @@ function selectStoryElement(category, element, button) {
         document.querySelector(`.story-category-${nextCategory}`).style.display = 'block';
         console.log(`顯示下一個類別: ${nextCategory}`);
     } else {
-        // 如果是最後一個類別（物品），顯示生成故事按鈕
+        // 如果最後一個類別（物品），顯示生成故事按鈕
         console.log('顯示生成故事按鈕');
         const generateStoryButton = document.getElementById('generate-story');
         generateStoryButton.style.display = 'block';
@@ -211,7 +211,7 @@ function playAnimalFactAudio(animal) {
 
 // 添加這個函數來獲取 ATEN token
 async function getATENToken() {
-    const response = await fetch('http://localhost:5000/api/aten-token');
+    const response = await fetch('/api/aten-token');  // 使用相對路徑
     const data = await response.json();
     return data.token;
 }
@@ -219,7 +219,7 @@ async function getATENToken() {
 // 修改 speakStory 函數
 async function speakStory(text) {
     console.log("透過 ATEN TTS API 朗讀故事");
-    const proxyUrl = 'http://localhost:5000/api/tts';
+    const proxyUrl = '/api/tts';  // 使用相對路徑
 
     // 將 emoji 轉換為中文描述
     const emojiToText = {
@@ -330,7 +330,7 @@ async function callGPTAPI(prompt) {
     console.log("使用提示呼叫 GPT API:", prompt);
     
     try {
-        const response = await fetch('http://localhost:5000/api/generate-story', {
+        const response = await fetch('/api/generate-story', {  // 使用相對路徑
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -349,3 +349,7 @@ async function callGPTAPI(prompt) {
         throw error;
     }
 }
+
+
+
+

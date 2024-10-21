@@ -79,7 +79,11 @@ function checkMatch() {
         if (matchedPairs === cards.length / 2) {
             setTimeout(() => {
                 alert('恭喜你赢了！');
-                transitionToStoryCreation(card1.animal);
+                if (confirm('想再玩一次吗？')) {
+                    startGame('4x4');  // 或者重新開始之前的遊戲模式
+                } else {
+                    transitionToStoryCreation(card1.animal);
+                }
             }, 1000);
         }
     } else {
@@ -96,7 +100,7 @@ function checkMatch() {
 
 function playSound(soundPath) {
     const audio = new Audio(soundPath);
-    audio.play();
+    audio.play().catch(e => console.error(`播放音效失败: ${soundPath}`, e));  // 增加錯誤處理
 }
 
 function playFlipSound() {
@@ -108,8 +112,13 @@ function playMatchSound() {
 }
 
 function playAnimalSound(animal) {
+    setBackgroundMusicVolume(0.2);  // 降低背景音樂音量
     const audio = new Audio(`${window.env.SOUNDS_PATH}${animal}.wav`);
-    audio.play().catch(e => console.error(`播放 ${animal} 音效失败:`, e));
+    audio.play().catch(e => console.error(`播放 ${animal} 音效失敗:`, e));
+
+    audio.onended = () => {
+        setBackgroundMusicVolume(0.5);  // 恢復背景音樂音量
+    };
 }
 
 function transitionToStoryCreation(animal) {
@@ -158,4 +167,12 @@ function playTaiwaneseAudio(animal) {
     audio.onended = () => {
         setBackgroundMusicVolume(0.5);
     };
+}
+
+function stopBackgroundMusic() {
+    const backgroundMusic = document.getElementById('background-music');
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;  // 每次暫停後重置播放時間
+    }
 }
